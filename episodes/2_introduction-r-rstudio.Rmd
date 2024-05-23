@@ -9,7 +9,6 @@ output: html_document
 knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = list(max.print = 100))
 ```
 
-
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - Why should you use R and RStudio?
