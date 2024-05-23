@@ -1,0 +1,407 @@
+---
+title: "Exploring and understanding data"
+teaching: 60
+exercises: 3
+output: html_document
+
+---
+
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How does R store and represent data?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Solve simple arithmetic operations in R.
+- Use comments to inform script.
+- Assign values to objects in R.
+- Call functions and use arguments to change their default options.
+- Understand vector types and missing data
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+
+## Setup
+
+
+
+
+
+
+## Simple arithmetic operations
+
+You can use R to do simple calculations
+
+
+
+```r
+3 * 5
+```
+
+```output
+[1] 15
+```
+
+
+```r
+3 + 5
+```
+
+```output
+[1] 8
+```
+The results will be shown in the console.
+
+
+## Comments
+
+All programming languages allow the programmer to include comments in their code to explain the code. 
+
+To do this in R we use the `#` character. Anything to the right of the `#` sign and up to the end of the line is treated as a comment and is ignored by R. You can start lines with comments or include them after any code on the line.
+
+
+```r
+3 * 5  # my first comment 
+```
+
+```output
+[1] 15
+```
+
+```r
+# my second comment
+```
+
+RStudio makes it easy to comment or uncomment a paragraph: after selecting the lines you  want to comment, press at the same time on your keyboard <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>. If you only want to comment out one line, you can put the cursor at any location of that line (i.e. no need to select the whole line), then press <kbd>Ctrl</kbd> + <kbd>Shift</kbd> + <kbd>C</kbd>.
+
+## Creating objects in R
+
+A fundemental part of programming is assigning values to named objects. The value is stored in memory, and we can refer to value using the name of the object.  To create an object, we need to give it a name followed by the assignment operator `<-`, and the value we want to give it.
+
+
+
+
+```r
+rectangle_length <- 3
+```
+
+What we are doing here is taking the result of the code on the right side of the arrow, and assigning it to an object whose name is on the left side of the arrow. So, after executing `rectangle_length <- 3`, the value of `rectangle_length` is `3`. 
+
+
+In RStudio, typing <kbd>Alt</kbd> + <kbd>\-</kbd> (push <kbd>Alt</kbd> at the same time as the <kbd>\-</kbd> key) will write `<- ` in a single keystroke in a PC, while typing <kbd>Option</kbd> + <kbd>\-</kbd> (push <kbd>Option</kbd> at the same time as the <kbd>\-</kbd> key) does the same in a Mac.
+
+Objects are displayed in Environment panel. Objects are stored in R memory, and can be accessed by typing the name of the object. If you restart R or RStudio, all the objects are deleted from memory.
+
+
+```r
+rectangle_length
+```
+
+```output
+[1] 3
+```
+
+
+Let's create second object.
+
+
+```r
+rectangle_width <- 5
+```
+
+Now that R has `rectangle_length` and `rectangle_width` in memory, we can do arithmetic with it. 
+
+
+```r
+rectangle_length * rectangle_width
+```
+
+```output
+[1] 15
+```
+
+```r
+rectangle_length + rectangle_width
+```
+
+```output
+[1] 8
+```
+
+We can also store the results in an object.
+
+
+```r
+rectangle_area <- rectangle_length * rectangle_width
+```
+When assigning a value to an object, R does not print anything. You can force R to print the value by typing the object name:
+
+
+```r
+rectangle_area <- rectangle_length * rectangle_width    # doesn't print anything
+rectangle_area        # typing the name of the object prints the value of the object
+```
+
+```output
+[1] 15
+```
+
+
+
+We can also change an object's value by assigning it a new one:
+
+
+```r
+rectangle_length <- 4
+rectangle_length
+```
+
+```output
+[1] 4
+```
+
+
+You will be naming a of objects in R, and there are a few common naming rules and conventions:
+
+- make names clear without being too long
+- names cannot start with a number
+- names are case sensitive. rectangle_length is different than Rectangle_length.
+- you cannot use the names of fundamental functions in R, like `if`, `else`, or `for`
+- avoid dots `.` in names
+- two common formats are `snake_case` and `camelCase`
+- be consistent, at least within a script, ideally within a whole project
+
+## Functions
+
+Functions are lines of code that are grouped together to do something. R language has many built in functions. You can also install and import R packages which have functions and data written by other people. You can also create your own function.
+
+A function usually gets one or more inputs called *arguments*.  Functions will do something with the arguments. Functions often (but not always) return a *value*.  Executing a function ('running it') is called *calling* the function.
+
+R has a function `round()`, that will round a number to a certain number of decimal places. We pass in `3.14159`, and it has returned the value `3`. That's because the default is to round to the nearest whole number. 
+ 
+
+```r
+round(3.14159)
+```
+
+```output
+[1] 3
+```
+
+
+To learn more about a function, you can type a `?` in front of the name of the function, which will bring up the official documentation for that function:
+
+
+
+```r
+?round
+```
+
+Function documentation is written by the authors of the functions, so they can vary pretty widely in their style and readability. **Description** section gives you a description of what the function does. **Arguments** section defines all the arguments for the function and is usually worth reading thoroughly. **Examples** section at the end will often have some helpful examples that you can run to get a sense of what the function is doing.
+
+`args()` will show the arguments of a function.
+
+
+```r
+args(round)
+```
+
+```output
+function (x, digits = 0, ...) 
+NULL
+```
+
+`round()` takes two arguements: x and digits. If we want a different number of digits, we can type `digits=2`.
+
+
+```r
+round(x = 3.14159, digits = 2)
+```
+
+```output
+[1] 3.14
+```
+
+If you provide the arguments in the exact same order as they are defined you don't have to name them:
+
+
+```r
+round(3.14159, 2)
+```
+
+```output
+[1] 3.14
+```
+
+And if you do name the arguments, you can switch their order:
+
+
+```r
+round(digits = 2, x = 3.14159)
+```
+
+```output
+[1] 3.14
+```
+
+## Data types in R
+
+Objects can store different types of values such as numbers, letters, etc. These different types of data are called data types.
+
+The function `typeof()` indicates the type of an object.
+
+The 3 common data types we will use in this class:
+
+1. numeric, aka double - all numbers with and without decimals.
+
+
+```r
+my_number <- 1
+typeof(my_number)
+```
+
+```output
+[1] "double"
+```
+
+```r
+my_number_2 <- 2.2
+typeof(my_number_2)
+```
+
+```output
+[1] "double"
+```
+
+
+2. character - all characters. The characters must be wrapped in quotes ("" or ''). 
+
+
+```r
+my_character <- 'dog'
+typeof(my_character)
+```
+
+```output
+[1] "character"
+```
+
+
+3. logical - can only have two values: TRUE and FALSE. Must be capitialize.
+
+
+```r
+my_logical <- TRUE
+typeof(my_logical)
+```
+
+```output
+[1] "logical"
+```
+
+
+## Vectors
+
+A vector is a  collection of values. We can assign a series of values to a vector using the `c()` function. All values in a vector must be the same data type. 
+
+Create an numeric vector.
+
+
+```r
+my_numbers <- c(1, 2, 5)
+my_numbers
+```
+
+```output
+[1] 1 2 5
+```
+
+```r
+typeof(my_numbers)
+```
+
+```output
+[1] "double"
+```
+
+Create an character vector.
+
+
+```r
+my_words <- c('the', 'dog')
+my_words
+```
+
+```output
+[1] "the" "dog"
+```
+
+```r
+typeof(my_words)
+```
+
+```output
+[1] "character"
+```
+
+If you try to create a vector with multiple types, R will coerce all the values to the same type.
+
+When there are numbers and charcters in a vector, all values are coerced to string.
+
+
+```r
+mixed <- c(1, 2, 'three')
+mixed
+```
+
+```output
+[1] "1"     "2"     "three"
+```
+
+```r
+typeof(mixed)
+```
+
+```output
+[1] "character"
+```
+
+
+## Missing data
+
+When dealing with data, there are times when a record does not have a value for a  field. Imagine filling out a form, and leaving some of the fields blank. R represents missing data as `NA`, without quotes. Let's make a numeric vector with an `NA` value:
+
+
+```r
+ages <- c(25, 34, NA, 42)
+ages
+```
+
+```output
+[1] 25 34 NA 42
+```
+
+`min()` returns the minimum value in a vector.  If we pass vector with NA a numeric function like `min()`, R won't know what to do, so it returns `NA`:
+
+
+```r
+min(ages)
+```
+
+```output
+[1] NA
+```
+
+Many basic math functions use `na.rm` argument to remove NA values from the vector when doing the calculation.
+
+
+```r
+min(ages, na.rm = TRUE)
+```
+
+```output
+[1] 25
+```
+
