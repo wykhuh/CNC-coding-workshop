@@ -86,11 +86,6 @@ library(ggplot2) # create data visualizations
 library(sf) # geospatial
 library(lubridate) # manipulate dates
 library(mapview) # create interactive maps
-library(here) # help access files on your computer
-
-```
-```{r, message=FALSE}
-here::i_am('episodes/1_intro_data_analysis.Rmd')
 
 ```
 
@@ -98,8 +93,7 @@ here::i_am('episodes/1_intro_data_analysis.Rmd')
 Load iNaturalist data from City Nature Challenge Los Angeles 2013-2023. There are over 170,000 observations.
 
 ```{r}
-path = here("data", "raw", "observations-397280.csv")
-inat <- read_csv(path)
+inat <- read_csv("data/raw/observations-397280.csv")
 ```
 
 Get the 10 most commonly observed 'species'.

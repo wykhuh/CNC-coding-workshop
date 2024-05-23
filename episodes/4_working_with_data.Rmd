@@ -53,24 +53,16 @@ There are two kinds of paths: **absolute** and **relative**. Absolute paths are 
 
 ```{r message=FALSE}
 library(readr)
-library(here)
 library(lubridate)
 library(dplyr)
-# library(sf)
 ```
 
 
 Now, let's read our CSV file into R and store it in an object named `inat_raw`. We will use the `here` package to set up the file path. We will use the `read_csv` function from the `tidyverse`'s `readr` package, and the argument we give will be the path to the CSV file.
 
-```{r, message=FALSE}
-here::i_am('episodes/4_working_with_data.Rmd')
-
-```
 
 ```{r}
-
-path = here('data', 'raw', 'observations-397280.csv')
-inat_raw <- read_csv(path)
+inat_raw <- read_csv('data/raw/observations-397280.csv')
 ```
 
 
@@ -313,8 +305,7 @@ We want to save the cleaned up data set so we can use it later.  We can save dat
 
 
 ```{r}
-path = here('data', 'cleaned', 'observations.csv')
-write_csv(inat, file= path)
+write_csv(inat, file= 'data/cleaned/observations.csv')
 ```
 
 

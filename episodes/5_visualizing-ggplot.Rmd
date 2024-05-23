@@ -29,13 +29,9 @@ knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = 
 
 ```{r load-tidyverse-package, message=FALSE}
 library(ggplot2)
-library(here)
 library(readr)
 library(dplyr)
 library(lubridate)
-
-# library(ratdat)
-
 ```
 
 ## Creating graphs
@@ -54,8 +50,7 @@ First, read data from the cleaned iNaturalist observation file.
 
 
 ```{r}
-path = here('data', 'cleaned', 'observations.csv')
-inat <- read_csv(path)
+inat <- read_csv('data/cleaned/observations.csv')
 
 ```
 
@@ -357,6 +352,5 @@ finalplot <- myplot +
 ```
 
 ```{r}
-path = here('data', 'cleaned', 'observations_per_year.jpg')
-ggsave(filename = path, plot = finalplot,  height = 6, width = 8)
+ggsave(filename = 'data/cleaned/observations_per_year.jpg', plot = finalplot,  height = 6, width = 8)
 ```

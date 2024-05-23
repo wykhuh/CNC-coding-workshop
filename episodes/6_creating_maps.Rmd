@@ -50,8 +50,7 @@ First, read data from the cleaned iNaturalist observation file.
 
 
 ```{r}
-path = here('data', 'cleaned', 'observations.csv')
-inat <- read_csv(path)
+inat <- read_csv('data/cleaned/observations.csv')
 
 ```
 
@@ -138,8 +137,7 @@ mapview(inat_lizard)
 Let's add LA county boundaries to the map. use `read_sf()` from `sf` package to read the shape file.
 
 ```{r}
-path = here('data', 'raw', 'County_Boundary', 'County_Boundary.shp')
-la_county <- read_sf(path)
+la_county <- read_sf('data/raw/County_Boundary/County_Boundary.shp')
                      
                     
 la_county
@@ -164,8 +162,7 @@ mapview(la_county) +
 Lets look for all iNaturalist observations made in Exposition Park. 
 
 ```{r}
-path = here('data', 'raw', 'boundaries_expo_park_area.geojson')
-expo_park <- st_read(path)   %>% st_transform(4326)
+expo_park <- st_read('data/raw/boundaries_expo_park_area.geojson')   %>% st_transform(4326)
 ```
 
 plot map of Expo Park.
