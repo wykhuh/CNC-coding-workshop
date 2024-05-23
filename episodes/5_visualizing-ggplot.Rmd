@@ -13,6 +13,18 @@ output: html_document
 knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = list(max.print = 100))
 ```
 
+:::::::::::::::::::::::::::::::::::::: questions 
+
+- How do we create graphs using R?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Learn how to create bar and line charts using ggplot2
+- Learn how to customize the appearance of the charts
+
+::::::::::::::::::::::::::::::::::::::::::::::::
 
 
 ```{r load-tidyverse-package, message=FALSE}
@@ -26,11 +38,6 @@ library(lubridate)
 
 ```
 
-:::::::::::::::::::::::::::::::::::::: questions 
-
-- How do we create graphs?
-
-::::::::::::::::::::::::::::::::::::::::::::::::
 ## Creating graphs
 
 We are going to be using functions from the **`ggplot2`** package to create visualizations.  **`ggplot`** plots are built step by step by adding new layers, which allows for extensive customization of plots.
