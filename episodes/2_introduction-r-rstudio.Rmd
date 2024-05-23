@@ -35,15 +35,15 @@ Think of R as English, and RStudio as Microsoft Word or Google Docs.
 
 Both R and RStudio are: 
 - free
-- open source: allows anyone to use and modify the software
 - cross platform: works on Mac, Windows, Linux 
+- open source: allows anyone to use and modify the software
 
 
 ## Navigating RStudio
 
 RStudio puts most of the things you need to work in R into a single window, and also includes features like keyboard shortcuts, autocompletion of code, and syntax highlighting (different types of code are colored differently, making it easier to navigate your code).
 
-
+![](fig/rstudio_screenshot.png){alt='Screenshot of RStudio showing the 4 "panes".'}
 
 In the above screenshot, we can see 4 "panes" in the default layout:
 
@@ -58,7 +58,7 @@ In the above screenshot, we can see 4 "panes" in the default layout:
 
 RStudio provides a “Projects” feature that can make it easier to work on individual projects in R. We will create a project that we will keep everything for this workshop.
 
-1.Start RStudio (you should see a view similar to the screenshot above).
+1. Start RStudio (you should see a view similar to the screenshot above).
 2. In the top right, you will see a blue 3D cube and the words “Project: (None)”. Click on this icon.
 3. Click New Project from the dropdown menu.
 4. Click New Directory, then New Project.
@@ -66,7 +66,7 @@ RStudio provides a “Projects” feature that can make it easier to work on ind
 6. Put it in a convenient location using the “Create project as a subdirectory of:” section.  You can always move the project somewhere else later, because it will be self-contained.
 7. Click Create Project and your new project will open.
 
-Next time you open RStudio, you can click that 3D cube icon, and you will see options to open existing projects, like the one you just made.
+When you need to work on the project, click on the  Rproj icon to start RStudio.
 
 One of the benefits to using RStudio Projects is that they automatically set the working directory to the top-level folder for the project. The working directory is the folder where R is working, so it views the location of all files (including data and scripts) as being relative to the working directory.  
 
@@ -92,11 +92,4 @@ project_folder
 ```
 
 Within our project folder, we first have a `scripts` folder to hold any scripts we write. We also have a `data` folder containing `cleaned` and `raw` subfolders. In general, you want to keep your `raw` data completely untouched, so once you put data into that folder, you do not modify it. Instead, you read it into R, and if you make any modifications, you write that modified file into the `cleaned` folder. We also have an `images` folder for plots we make, and a `documents` folder for any other documents you might produce.
-
-Let's start making our new folders. Go to the **Files** pane (bottom right), and check the current directory, highlighted in yellow below. You should be in the directory for the project you just made. You shouldn't see any folders in here yet.
-
-
-Next, click the **New Folder** button, and type in `scripts` to generate your `scripts` folder. It should appear in the Files list now. Repeat the process to make your `data`, `images`, and `documents` folders. Then, click on the `data` folder in the Files pane. This will take you into the `data` folder, which will be empty. Use the **New Folder** button to create `raw` and `cleaned` folders. To return to the parent folder, click on it in the file path, which is highlighted in yellow in the previous image. It's worth noting that the **Files** pane helps you create, find, and open files, but moving through your files won't change where the **working directory** of your project is.
-
-
 

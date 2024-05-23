@@ -248,19 +248,19 @@ typeof(mixed)
 When dealing with data, there are times when a record does not have a value for a  field. Imagine filling out a form, and leaving some of the fields blank. R represents missing data as `NA`, without quotes. Let's make a numeric vector with an `NA` value:
 
 ```{r}
-weights <- c(25, 34, NA, 42)
-weights
+ages <- c(25, 34, NA, 42)
+ages
 ```
 
 `min()` returns the minimum value in a vector.  If we pass vector with NA a numeric function like `min()`, R won't know what to do, so it returns `NA`:
 
 ```{r}
-min(weights)
+min(ages)
 ```
 
 Many basic math functions use `na.rm` argument to remove NA values from the vector when doing the calculation.
 
 ```{r}
-min(weights, na.rm = TRUE)
+min(ages, na.rm = TRUE)
 ```
 

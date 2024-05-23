@@ -29,25 +29,16 @@ knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = 
 
 ## R Packages
 
-R packages contain code, data, and documentation that can be installed by users of R. There are thousands of packages that people can download, install, and use in their code. 
+R packages are extensions to the R language. R packages contain code, data, and documentation that people can download and install to add more functionality to R. 
 
-To download and install packages onto your computer, use `install.packages("package_name")`. Must use quotes.
+To download and install packages onto your computer, type `install.packages("package_name")` in the R console. Must use quotes. This function will connect to the internet and download packages from servers that have R packages. The Comprehensive R Archive Network (cran.r-project.org) is a network of web servers around the world that store R packages.  
 
-To use the package in our current session, use `library(package_name)` to load it. Do not use quotes.
-
-You want to install the package to your computer once, and then load it with `library()` in each script where you need to use it. Generally its a good idea to list all the libraries at the beginning of the script.
-
-It is a good practice not to put `install.packages()` into a script. This is because every time you run that whole script, the package will be reinstalled, which is typically unnecessary. You want to install the package to your computer once, and then load it with `library()` in each script where you need to use it.
+To use the package, use `library(package_name)` to load it. Do not use quotes. You want to install the package to your computer once, and then load it with `library()` in each script where you need to use it. Generally its a good idea to list all the libraries at the beginning of the script.
 
 
 ### `tidyverse`
 
-The phrase **base R** is used to refer to approaches that utilize functions contained in R's default packages. 
-
-`tidyverse` is collection of R packages that are used for analyzing data. We will use `readr` for read tabular data,  `ggplot2` for graphing, and `dplyr` for data manipulation.
-
-the **`tidyverse`** series of packages, which tend to like data in the "long" or "tidy" format, which means each column represents a single variable, and each row represents a single observation.  
-
+`tidyverse` is collection of R packages that are used for analyzing data.  These packages like data in "tidy" format, which means each column represents a single field, and each row represents a single record
 
 ## Importing data
 
@@ -65,17 +56,16 @@ library(readr)
 library(here)
 library(lubridate)
 library(dplyr)
-library(sf)
-
-# library(flextable) # tables
-
-# library(gt) # tables
-# library(webshot2) # save gt tables as images
+# library(sf)
 ```
 
 
 Now, let's read our CSV file into R and store it in an object named `inat_raw`. We will use the `here` package to set up the file path. We will use the `read_csv` function from the `tidyverse`'s `readr` package, and the argument we give will be the path to the CSV file.
 
+```{r, message=FALSE}
+here::i_am('episodes/4_working_with_data.Rmd')
+
+```
 
 ```{r}
 
@@ -99,7 +89,7 @@ To actually take a look at the data, we can use the `View()` function to open an
 # View(inat_raw)
 ```
 
-Use glimpse() to see a information about a dataframe. Number of rows and columns. We see the column nane, kind of data type (**dbl** for number, **chr** for character, **lgl** for logical. **date** is a data type from data.frame), and the first few values.  
+Use `glimpse()` to see a information about a dataframe. Number of rows and columns. We see the column nane, kind of data type (**dbl** for number, **chr** for character, **lgl** for logical. **date** is a data type from data.frame), and the first few values.  
 
  
 ```{r}
@@ -144,7 +134,7 @@ unique(inat_raw$quality_grade)
 
 ## Manipulating data
 
-One of the most important skills for working with data in R is the ability to manipulate, modify, and reshape data. The `dplyr` packages in the `tidyverse` provide a series of powerful functions for many common data manipulation tasks.
+One of the most important skills for working with data in R is the ability to manipulate, modify, and reshape data. The `dplyr`  provide a series of powerful functions for many common data manipulation tasks.
 
 select()
 filter()
@@ -185,7 +175,7 @@ What happens if we want to both `select()` and `filter()` our data?
 
 An elegant solution to this problem is an operator called the **pipe**, which looks like `%>%`. You can insert it by using the keyboard shortcut <kbd>Shift+Cmd+M</kbd> (Mac) or <kbd>Shift+Ctrl+M</kbd> (Windows). 
 
-Get the user_login, time_observed_at, common_name for all observations where common_name is  'Western Fence Lizard'.
+Get the user_login, time_observed_at, common_name for all observations where common_name is  'Western Fence Lizard'. Use filter to select rows, then use select to select columns.
 
 ```{r}
 inat_raw %>% 
@@ -193,7 +183,7 @@ inat_raw %>%
   select(user_login, observed_on, common_name, quality_grade) 
 ```
 
-What it does is take the thing on the lefthand side and insert it as the first argument of the function on the righthand side. By putting each of our functions onto a new line, we can build a nice, readable **pipeline**. It can be useful to think of this as a little assembly line for our data. It starts at the top and gets piped into a `filter()` function, and it comes out modified somewhat. It then gets sent into the `select()` function, where it is further modified, and then the final product gets printed out to our console. It can also be helpful to think of `%>%` as meaning "and then".  
+Pipe operator take the thing on the lefthand side and insert it as the first argument of the function on the righthand side. By putting each of our functions onto a new line, we can build a nice, readable **pipeline**. It can be useful to think of this as a little assembly line for our data. It starts at the top and gets piped into a `filter()` function, and it comes out modified somewhat. It then gets sent into the `select()` function, where it is further modified, and then the final product gets printed out to our console. It can also be helpful to think of `%>%` as meaning "and then".  
 
 If you want to see all the records, assign the data.frame to an object, and use `View()`
 
@@ -202,11 +192,13 @@ temp <- inat_raw %>%
   filter(common_name == 'Western Fence Lizard') %>% 
   select(user_login, observed_on, common_name, quality_grade) 
 
+# View(temp)
+
 ```
 
 We can also use multiple conditions in one `filter()` statement. 
 
-When researchers use iNaturalist data, the normally use research grade observations. Here we will get all research grade observations of Western Fence Lizard. use `&` for and.
+When researchers use iNaturalist data, the normally use research grade observations. Here we will get all observations that research grade and common_name is Western Fence Lizard. use `&` for and.
  
 ```{r}
 inat_raw %>% 

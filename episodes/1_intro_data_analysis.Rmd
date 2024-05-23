@@ -31,6 +31,7 @@ When iNaturalist users add an observation through the iNaturalist app, that data
 CSV is a text file format for tabular data. Each line represents one  record. Each column represents a field. The fields are separated by commas.
 
 The iNaturalist CSV has information about:
+
 - the user who made observation
 - the location of the observation
 - the observed species
@@ -38,7 +39,7 @@ The iNaturalist CSV has information about:
 
 # Instructions to download iNaturalist data 
 
-To download iNaturalist data, you need an account. Visit iNaturalist, and use the site tools to select which observations you want. Then click the download button. You will be taken to a page that lets you pick what fields to include in the downloads. Then click "Create Export". The number of observations and the fields selected will determine how long it will take to create the download. 
+Here's a video that shows how to select and download data from iNaturalist.
 
 To save time and ensure everyone at the workshop has the same data, here is a link to a CSV with iNaturalist City Nature Challenge Los Angeles data from 2013 to 2024. 
 
@@ -63,40 +64,39 @@ This class uses R because it is a popular language in ecology research and other
 # Example of analyzing iNaturalist data using R
 
 
-Load iNaturalist data from City Nature Challenge Los Angeles 2013-2023. There are over 170,000 observations.
 
-```{r}
+```{r, echo=FALSE}
  
 # options(repos = c(
 #     carpentries = "https://carpentries.r-universe.dev/",
 #     CRAN = "https://cran.rstudio.com/"
 # ))
 # 
-# # Install the template packages to your R library
-# install.packages(c('here', "sandpaper", "varnish", "pegboard", "tinkr", "xfun"))
+# install.packages(c("sandpaper", "varnish"))
 
-# install.packages(c('here', "tidyverse", "sf", "mapview"))
+# install.packages(c("tidyverse", "here", "lubridate", "mapview", "sf"))
 ```
 
+Load software that will will need.
 
 ```{r, message=FALSE}
-library(dplyr)
-library(ggplot2)
-library(readr)
-
-library(sf) # geo
- # library(terra)
-
-library(here)
-
-# library(gt) # tables
-# library(webshot2) # save gt tables as images
-library(lubridate)
-
-library(mapview)
-# library(leafpop)
+library(readr) # read and write tabular data
+library(dplyr) # manipulate data
+library(ggplot2) # create data visualizations
+library(sf) # geospatial
+library(lubridate) # manipulate dates
+library(mapview) # create interactive maps
+library(here) # help access files on your computer
 
 ```
+```{r, message=FALSE}
+here::i_am('episodes/1_intro_data_analysis.Rmd')
+
+```
+
+
+Load iNaturalist data from City Nature Challenge Los Angeles 2013-2023. There are over 170,000 observations.
+
 ```{r}
 path = here("data", "raw", "observations-397280.csv")
 inat <- read_csv(path)
@@ -135,27 +135,17 @@ Create a map showing all the observations for Western Fence Lizard
 https://www.ecologi.st/spatial-r/rdemo.html#converting-a-dataframe-into-a-spatial-object
 
 ```{r}
-plot_locations <- inat %>%
-  filter(!is.na(latitude)) %>%
-  filter(!is.na(longitude)) %>%
-  filter(latitude < 40) %>%
-  mutate(year = year(observed_on))  %>%
-  filter(common_name == 'Western Fence Lizard')  %>%
-  st_as_sf(coords = c("longitude", "latitude"),   crs = 4326)
+inat_lizard <- inat %>% 
+  filter(!is.na(latitude) &
+           !is.na(longitude) &
+           !is.na(scientific_name)) %>% 
+  st_as_sf(coords = c("longitude", "latitude"),   crs = 4326, remove=FALSE) %>% 
+  select(id, user_login, common_name, scientific_name, observed_on,  url, longitude, latitude, geometry) %>% 
+  filter(common_name == 'Western Fence Lizard')
 
 
-plot_locations
+mapview(inat_lizard)
 ```
   
-https://www.ecologi.st/spatial-r/rdemo.html#interactive-maps-with-leaflet-and-mapview
 
-```{r}
-
-
-# lpl <- plot_locations %>%
-#   mutate(click_url = paste("<a href='", url, "'>Link to iNat observation</a>"))
-
-
-mapview(plot_locations)
-```
 

@@ -156,19 +156,18 @@ mapview(la_county) +
 
 Lets look for all iNaturalist observations made in Exposition Park. 
 
-
-
-
 ```{r}
 path = here('data', 'raw', 'boundaries_expo_park_area.geojson')
-expo_park <- st_read(path) %>% st_transform(4326)
-```
-```{r}
-path = here('data', 'raw', 'boundaries_expo_park_area.geojson')
-expo_park <- read_sf(path)   %>% st_transform(4326)
+expo_park <- st_read(path)   %>% st_transform(4326)
 ```
 
 plot map of Expo Park.
+
+
+```{r}
+ggplot() +
+  geom_sf(data = expo_park) 
+```
 
 ```{r}
 mapview(expo_park) 
@@ -197,6 +196,12 @@ dim(inat_expo)
 ```
 
 Create map of all observations in Expo Park.
+
+```{r}
+ggplot() +
+  geom_sf(data = expo_park)  +
+  geom_sf(data = inat_expo) 
+```
 
 ```{r}
 mapview(expo_park) +
