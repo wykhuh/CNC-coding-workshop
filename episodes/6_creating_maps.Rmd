@@ -10,22 +10,29 @@ output: html_document
 knitr::opts_chunk$set(dpi = 200, out.height = 600, out.width = 600, R.options = list(max.print = 100))
 ```
 
+:::::::::::::::::::::::::::::::::::::: questions 
 
-```{r}
+- How do we create maps using R?
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+::::::::::::::::::::::::::::::::::::: objectives
+
+- Learn how to create static maps with ggplot2
+- Learn how to create interactive maps with mapview
+- Learn how to plot iNaturalist observations on a map
+
+::::::::::::::::::::::::::::::::::::::::::::::::
+
+```{r message=FALSE}
 library(sf)
 library(dplyr)
-# library(leaflet)
 library(here)
 library(readr)
 library(ggplot2)
 library(mapview)
 
 ```
-:::::::::::::::::::::::::::::::::::::: questions 
-
-- How do we create maps?
-
-::::::::::::::::::::::::::::::::::::::::::::::::
 
 ## Geographic data
 
