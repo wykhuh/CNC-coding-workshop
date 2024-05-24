@@ -2,53 +2,84 @@
 title: Setup
 ---
 
-FIXME: Setup instructions live in this document. Please specify the tools and
-the data sets the Learner needs to have installed.
 
-## Data Sets
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::: instructor
 
-<!--
-FIXME: place any data you want learners to use in `episodes/data` and then use
-       a relative link ( [data zip file](data/lesson-data.zip) ) to provide a
-       link to it, replacing the example.com link.
--->
-Download the [data zip file](https://example.com/FIXME) and unzip it to your Desktop
+Setup instructions live in this document. Please specify the tools and the data sets the learner needs to have installed. If you want to hide different setup instructions, you can use a `solution` tag.
 
-## Software Setup
+::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-::::::::::::::::::::::::::::::::::::::: discussion
+### Install R and RStudio
 
-### Details
+R and RStudio are two separate pieces of software:
 
-Setup for different systems can be presented in dropdown menus via a `spoiler`
-tag. They will join to this discussion block, so you can give a general overview
-of the software used in this lesson here and fill out the individual operating
-systems (and potentially add more, e.g. online setup) in the solutions blocks.
+* **R** is a programming language and software used to run code written in R.
+* **RStudio** is an integrated development environment (IDE) that makes using R easier.
 
-:::::::::::::::::::::::::::::::::::::::::::::::::::
+If you don't already have R and RStudio installed, follow the instructions for your operating system below. You have to install R before you install RStudio.
 
-:::::::::::::::: spoiler
+<br>
 
-### Windows
+:::::::::::::::: solution
 
-Use PuTTY
+## For Windows
 
-::::::::::::::::::::::::
+* Download R from the [CRAN website](https://cran.r-project.org/bin/windows/base/release.htm).
+* Run the `.exe` file that was just downloaded
+* Go to the [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
+* Under *Installers* select **RStudio x.yy.zzz - Windows Vista/7/8/10** (where x, y, and z represent version numbers)
+* Double click the file to install it
+* Once it's installed, open RStudio to make sure it works and you don't get any error messages.
 
-:::::::::::::::: spoiler
+:::::::::::::::::::::::::
 
-### MacOS
+:::::::::::::::: solution
 
-Use Terminal.app
+## For MacOS
 
-::::::::::::::::::::::::
+* Download R from the [CRAN website](https://cran.r-project.org/bin/macosx/).
+* Select the `.pkg` file for the latest R version
+* Double click on the downloaded file to install R
+* Go to the [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
+* Under *Installers* select **RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit)** (where x, y, and z represent version numbers)
+* Double click the file to install RStudio
+* Once it's installed, open RStudio to make sure it works and you don't get any error messages.
+
+:::::::::::::::::::::::::
+
+:::::::::::::::: solution
+
+## For Linux
+
+* Download R from the [CRAN website](https://cran.r-project.org/bin/macosx/).
+* Select the `.pkg` file for the latest R version
+* Double click on the downloaded file to install R
+* Go to the [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
+* Under *Installers* select **RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit)** (where x, y, and z represent version numbers)
+* Double click the file to install RStudio
+* Once it's installed, open RStudio to make sure it works and you don't get any error messages.
+
+:::::::::::::::::::::::::
 
 
-:::::::::::::::: spoiler
+### Install required R packages
 
-### Linux
+During the course we will need a number of R packages. Packages contain useful R code written by other people.
 
-Use Terminal
+To install these packages, open RStudio and copy and paste the following command into the console window (look for a blinking cursor on the bottom left), then press the <kbd>Enter</kbd> (Windows and Linux) or <kbd>Return</kbd> (MacOS) to execute the command.
 
-::::::::::::::::::::::::
+```{r}
+install.packages(c("tidyverse", "lubridate", "mapview", "sf"))
+```
 
+R will download and install the packages on your machine.
+
+When the installation has finished, you can try to load the packages by pasting the following code into the console:
+
+```r
+library(readr)
+library(ggplot2)
+
+```
+
+If you do not see an error like `there is no package called ‘...’` you are good to go!
