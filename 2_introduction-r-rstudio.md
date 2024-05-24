@@ -7,7 +7,6 @@ output: html_document
 
 
 
-
 :::::::::::::::::::::::::::::::::::::: questions 
 
 - Why should you use R and RStudio?

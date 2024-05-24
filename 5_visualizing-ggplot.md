@@ -28,12 +28,9 @@ output: html_document
 
 ```r
 library(ggplot2)
-library(here)
 library(readr)
 library(dplyr)
 library(lubridate)
-
-# library(ratdat)
 ```
 
 ## Creating graphs
@@ -53,12 +50,20 @@ First, read data from the cleaned iNaturalist observation file.
 
 
 ```r
-path = here('data', 'cleaned', 'observations.csv')
-inat <- read_csv(path)
+inat <- read_csv('data/cleaned/observations.csv')
 ```
 
-```error
-Error: '/home/runner/work/CNC-coding-workshop/CNC-coding-workshop/site/built/data/cleaned/observations.csv' does not exist.
+```output
+Rows: 93950 Columns: 39
+── Column specification ────────────────────────────────────────────────────────
+Delimiter: ","
+chr  (23): observed_on_string, time_observed_at, time_zone, user_login, user...
+dbl  (10): id, user_id, num_identification_agreements, num_identification_di...
+lgl   (5): captive_cultivated, private_place_guess, private_latitude, privat...
+date  (1): observed_on
+
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.
 ```
 
 
@@ -74,10 +79,6 @@ inat_year <- inat %>%
   mutate(year = year(observed_on))
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat' not found
-```
-
 Pass the data to ggplot.
 
 
@@ -85,9 +86,7 @@ Pass the data to ggplot.
 ggplot(data = inat_year)
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-3-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 We need tell ggplot how to process the data. We tell ggplot how to map the data  to various plot elements, such as x/y axis, size, or color by using the `aes()` function.  
 For bar charts, we need to tell what column to use for the x axis. We want to create a plot with years on the x axis so we use `mapping = aes(x = year)`. ggplot will count the number of rows for each year, and use the count for y axis.
@@ -98,9 +97,7 @@ For bar charts, we need to tell what column to use for the x axis. We want to cr
 ggplot(data = inat_year, mapping = aes(x = year))
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-4-1.png" width="600" height="600" style="display: block; margin: auto;" />
 Next we need to  specify how we want the data to be displayed. We do this using `geom_` functions, which specify the type of geometry we want, such as points, lines, or bars. We use `geom_bar()` to create a vertical bar plot.
 
 We can add a `geom_bar()` layer to our plot by using the `+` sign. We indent onto a new line to make it easier to read, and we have to **end** the first line with the `+` sign.
@@ -112,9 +109,7 @@ ggplot(data = inat_year, mapping = aes(x = year)) +
   geom_bar()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-5-1.png" width="600" height="600" style="display: block; margin: auto;" />
 If we want year on x axis, and count on y axis, use `coord_flip()`
 
 
@@ -124,9 +119,7 @@ ggplot(data = inat_year, mapping = aes(x = year)) +
   coord_flip()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-6-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 
 ## Line chart
@@ -140,18 +133,22 @@ For line charts, we need both x and y variables. Create a dataframe that count t
 inat_year_count <- inat %>% 
   mutate(year = year(observed_on)) %>%
   count(year, name='obs_count')  
-```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat' not found
-```
-
-```r
 inat_year_count
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year_count' not found
+```output
+# A tibble: 8 × 2
+   year obs_count
+  <dbl>     <int>
+1  2016      5791
+2  2017      9354
+3  2018     10855
+4  2019     17950
+5  2020     10659
+6  2021     13051
+7  2022     11924
+8  2023     14366
 ```
  We use  year on the x axis and  obs_count on the y axis. And we use `geom_line()` for to create a line chart.
  
@@ -162,9 +159,7 @@ ggplot(data = inat_year_count,
   geom_line()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year_count' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-scatter-plot-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 ##  More bar plots
 
@@ -179,9 +174,7 @@ ggplot(data = inat_year_count,
   geom_col()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year_count' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-8-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 
 
@@ -203,20 +196,13 @@ Create a chart with all your observations for each year
 my_year  <- inat %>% 
   mutate(year = year(observed_on))  %>% 
   filter(user_login == 'natureinla')
-```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat' not found
-```
-
-```r
+  
 ggplot(data = my_year, mapping = aes(x = year)) +
   geom_bar()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'my_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-9-1.png" width="600" height="600" style="display: block; margin: auto;" />
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
@@ -267,9 +253,7 @@ ggplot(data = inat_year, mapping = aes(x = year)) +
   geom_bar(fill='aquamarine')
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-11-1.png" width="600" height="600" style="display: block; margin: auto;" />
 We can also use 6 digit hex color. You can use online tools to get hex colors. https://html-color.codes
 
 
@@ -278,9 +262,7 @@ ggplot(data = inat_year, mapping = aes(x = year)) +
   geom_bar(fill='#75cd5e')
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-12-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 ## Adding another variable
 
@@ -291,8 +273,11 @@ iNaturalist has  af field called `iconic_taxon_name` that assigns each taxa name
 unique(inat$iconic_taxon_name)
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat' not found
+```output
+ [1] "Mollusca"       "Insecta"        "Reptilia"       "Aves"          
+ [5] "Mammalia"       "Plantae"        "Animalia"       "Arachnida"     
+ [9] "Amphibia"       "Fungi"          "Chromista"      "Actinopterygii"
+[13] NA               "Protozoa"      
 ```
 
 Create  charts that show the observations per year, and subdivide  each year by `iconic_taxon_name.` Give each `iconic_taxon_name` a different color.
@@ -307,9 +292,7 @@ ggplot(data = inat_year, mapping = aes(x = year, fill=iconic_taxon_name)) +
   geom_bar()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-14-1.png" width="600" height="600" style="display: block; margin: auto;" />
 We create a new dataframe that counts the number observations per year and iconic_taxon_name. Use `mutate()` and `year()` to add a `year` column. We want count by both `year` and `iconic_taxon_name`. We want the column to be called `obs_count`.
 
 
@@ -317,18 +300,25 @@ We create a new dataframe that counts the number observations per year and iconi
 inat_year_iconic_count <- inat %>% 
   mutate(year = year(observed_on))  %>%
   count(year, iconic_taxon_name, name='obs_count') 
-```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat' not found
-```
-
-```r
 inat_year_iconic_count
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year_iconic_count' not found
+```output
+# A tibble: 107 × 3
+    year iconic_taxon_name obs_count
+   <dbl> <chr>                 <int>
+ 1  2016 Actinopterygii            1
+ 2  2016 Amphibia                 87
+ 3  2016 Animalia                 87
+ 4  2016 Arachnida                99
+ 5  2016 Aves                    976
+ 6  2016 Chromista                 9
+ 7  2016 Fungi                    24
+ 8  2016 Insecta                1325
+ 9  2016 Mammalia                192
+10  2016 Mollusca                183
+# ℹ 97 more rows
 ```
 Create a line chart that shows iconic_taxon_name by color.
 
@@ -339,9 +329,7 @@ inat_year_iconic_count %>%
   geom_line()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year_iconic_count' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-16-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 
 ## Changing scales
@@ -358,9 +346,7 @@ ggplot(data = inat_year, mapping = aes(x = year, fill=iconic_taxon_name)) +
   scale_fill_viridis_d()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-17-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
  
 ## Changing themes
@@ -371,19 +357,11 @@ we can assign a plot to an object
 ```r
 myplot <- ggplot(data = inat_year, mapping = aes(x = year)) +
   geom_bar(fill='#75cd5e')
-```
 
-```error
-Error in eval(expr, envir, enclos): object 'inat_year' not found
-```
-
-```r
 myplot
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'myplot' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-18-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 We can change the overall appearance using `theme_` functions. Let's try a black-and-white theme by adding `theme_bw()` to our plot:
 
@@ -393,9 +371,7 @@ myplot +
   theme_bw()
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'myplot' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-theme-bw-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 To see a list of available themes in ggplot, visit https://ggplot2.tidyverse.org/reference/index.html#themes
 
@@ -411,9 +387,7 @@ myplot +
   theme(axis.title = element_text(size = 14))
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'myplot' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-text-size-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 Another change we might want to make is to remove the vertical grid lines.  To do this, inside `theme()`, we will change the `panel.grid.major.x` to an `element_blank()`.
 
@@ -426,9 +400,7 @@ myplot +
         panel.grid.minor.x = element_blank())
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'myplot' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-element-blank-1.png" width="600" height="600" style="display: block; margin: auto;" />
  
 Because there are so many possible arguments to the `theme()` function, it can sometimes be hard to find the right one. Here are some tips for figuring out how to modify a plot element:
 
@@ -459,9 +431,7 @@ myplot +
        y = "Observations")
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'myplot' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-labels-1.png" width="600" height="600" style="display: block; margin: auto;" />
 
 ::::::::::::::::::::::::::::::::::::: challenge 
 
@@ -486,21 +456,13 @@ my_yearly_plot  <- inat %>%
   filter(user_login == 'natureinla') %>% 
   ggplot(data = my_year, mapping = aes(x = year)) +
   geom_bar(fill='#E0A90A')
-```
 
-```error
-Error: object 'my_year' not found
-```
-
-```r
 my_yearly_plot +
   theme_classic() +
   labs(title = "CNC Los Angeles",  x = "Year",  y = "Observations") 
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'my_yearly_plot' not found
-```
+<img src="fig/5_visualizing-ggplot-rendered-unnamed-chunk-19-1.png" width="600" height="600" style="display: block; margin: auto;" />
 ::::::::::::::::::::::::::::::::::::::::::::::::
 
 
@@ -523,19 +485,7 @@ finalplot <- myplot +
        y = "Observations")
 ```
 
-```error
-Error in eval(expr, envir, enclos): object 'myplot' not found
-```
-
 
 ```r
-path = here('data', 'cleaned', 'observations_per_year.jpg')
-ggsave(filename = path, plot = finalplot,  height = 6, width = 8)
-```
-
-```error
-Error in `ggsave()`:
-! Cannot find directory
-  '/home/runner/work/CNC-coding-workshop/CNC-coding-workshop/site/built/data/cleaned'.
-ℹ Please supply an existing directory or use `create.dir = TRUE`.
+ggsave(filename = 'data/cleaned/observations_per_year.jpg', plot = finalplot,  height = 6, width = 8)
 ```

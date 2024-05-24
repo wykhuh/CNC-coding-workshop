@@ -49,27 +49,22 @@ There are two kinds of paths: **absolute** and **relative**. Absolute paths are 
 
 #### Read a file
 
+Use library to load the needed packages.
+
 
 ```r
 library(readr)
-library(here)
 library(lubridate)
 library(dplyr)
-# library(sf)
 ```
 
 
-Now, let's read our CSV file into R and store it in an object named `inat_raw`. We will use the `here` package to set up the file path. We will use the `read_csv` function from the `tidyverse`'s `readr` package, and the argument we give will be the path to the CSV file.
+We will use the `read_csv` function from `readr` package to read a csv of CNC iNaturalist observations, and the argument we give will be the path to the CSV file. We will store the observations in an object named `inat_raw`.
 
-
-```r
-here::i_am('episodes/4_working_with_data.Rmd')
-```
 
 
 ```r
-path = here('data', 'raw', 'observations-397280.csv')
-inat_raw <- read_csv(path)
+inat_raw <- read_csv('data/raw/observations-397280.csv')
 ```
 
 ```output
@@ -89,20 +84,15 @@ date  (1): observed_on
 `inat_raw` is stored in memory. It appears in **Environment** tab. Double click on `inat_raw` in **Environment** to see all the data.
 
 
-You may have noticed a bit of feedback from R when you ran the last line of code. We got some useful information about the CSV file we read in. We can see:
+`read_csv` provides some info about the CSV. 
 
 - the number of rows and columns
 - the **delimiter** of the file, which is how values are separated, a comma `","`
 - the data types for the columns
 
-To actually take a look at the data, we can use the `View()` function to open an interactive viewer. 
 
 
-```r
-# View(inat_raw)
-```
-
-Use `glimpse()` to see a information about a dataframe. Number of rows and columns. We see the column nane, kind of data type (**dbl** for number, **chr** for character, **lgl** for logical. **date** is a data type from data.frame), and the first few values.  
+Use `glimpse()` to see a information about a dataframe. Number of rows and columns. For each column, we see the name, data type (**dbl** for number, **chr** for character, **lgl** for logical. **date** is a data type from data.frame), and the first few values.  
 
  
 
@@ -185,7 +175,7 @@ dim(inat_raw)
 ```
 
 
-Get column names
+`names()` shows the column names
 
 
 ```r
@@ -262,7 +252,7 @@ unique(inat_raw$quality_grade)
 
 ## Manipulating data
 
-One of the most important skills for working with data in R is the ability to manipulate, modify, and reshape data. The `dplyr`  provide a series of powerful functions for many common data manipulation tasks.
+One of the most important skills for working with data in R is the ability to manipulate, modify, and reshape data. The `dplyr` package provide a series of powerful functions for many common data manipulation tasks.
 
 select()
 filter()
@@ -275,28 +265,28 @@ count()
 
 `select()` picks certain columns of a data.frame. To use the `select()` function, the first argument is the name of the data.frame, and the rest of the arguments are *unquoted* names of the columns you want.
 
-iNaturalist has 39 columns. We want three columns. The columns are arranged in the order we specified inside `select()`.
+iNaturalist has 39 columns. We want four columns. The columns are arranged in the order we specified inside `select()`.
 
 
 
 ```r
-select(inat_raw, user_login, common_name, observed_on)
+select(inat_raw, user_login, common_name, scientific_name, observed_on)
 ```
 
 ```output
-# A tibble: 171,155 × 3
-   user_login    common_name                          observed_on
-   <chr>         <chr>                                <date>     
- 1 msmorales     Garden Snail                         2016-04-14 
- 2 smartrf       Bot Flies, Blow Flies, and Allies    2016-04-14 
- 3 stonebird     Allen's Hummingbird                  2016-04-14 
- 4 cdegroof      California Orange-winged Grasshopper 2016-04-14 
- 5 cdegroof      Western Side-blotched Lizard         2016-04-14 
- 6 cdegroof      Western Fence Lizard                 2016-04-14 
- 7 ttempel       <NA>                                 2016-04-14 
- 8 bradrumble    House Sparrow                        2016-04-15 
- 9 deedeeflower5 Amur Carp                            2016-04-14 
-10 deedeeflower5 Red-eared Slider                     2016-04-14 
+# A tibble: 171,155 × 4
+   user_login    common_name                         scientific_name observed_on
+   <chr>         <chr>                               <chr>           <date>     
+ 1 msmorales     Garden Snail                        Cornu aspersum  2016-04-14 
+ 2 smartrf       Bot Flies, Blow Flies, and Allies   Oestroidea      2016-04-14 
+ 3 stonebird     Allen's Hummingbird                 Selasphorus sa… 2016-04-14 
+ 4 cdegroof      California Orange-winged Grasshopp… Arphia ramona   2016-04-14 
+ 5 cdegroof      Western Side-blotched Lizard        Uta stansburia… 2016-04-14 
+ 6 cdegroof      Western Fence Lizard                Sceloporus occ… 2016-04-14 
+ 7 ttempel       <NA>                                Coelocnemis     2016-04-14 
+ 8 bradrumble    House Sparrow                       Passer domesti… 2016-04-15 
+ 9 deedeeflower5 Amur Carp                           Cyprinus rubro… 2016-04-14 
+10 deedeeflower5 Red-eared Slider                    Trachemys scri… 2016-04-14 
 # ℹ 171,145 more rows
 ```
 
@@ -342,45 +332,43 @@ The `==` sign means "is equal to". There are several other operators we can use:
 
 What happens if we want to both `select()` and `filter()` our data? 
 
-An elegant solution to this problem is an operator called the **pipe**, which looks like `%>%`. You can insert it by using the keyboard shortcut <kbd>Shift+Cmd+M</kbd> (Mac) or <kbd>Shift+Ctrl+M</kbd> (Windows). 
+We use the pipe operator (`%>%`) to call multiple functions. You can insert it by using the keyboard shortcut <kbd>Shift+Cmd+M</kbd> (Mac) or <kbd>Shift+Ctrl+M</kbd> (Windows). 
 
-Get the user_login, time_observed_at, common_name for all observations where common_name is  'Western Fence Lizard'. Use filter to select rows, then use select to select columns.
+Get  user_login, common_name, scientific_name, observed_on for all observations where common_name is  'Western Fence Lizard'. Use filter to select rows, then use select to select columns.
 
 
 ```r
 inat_raw %>% 
   filter(common_name == 'Western Fence Lizard') %>% 
-  select(user_login, observed_on, common_name, quality_grade) 
+  select(user_login, common_name, scientific_name, observed_on) 
 ```
 
 ```output
 # A tibble: 2,970 × 4
-   user_login    observed_on common_name          quality_grade
-   <chr>         <date>      <chr>                <chr>        
- 1 cdegroof      2016-04-14  Western Fence Lizard research     
- 2 deedeeflower5 2016-04-14  Western Fence Lizard research     
- 3 deedeeflower5 2016-04-14  Western Fence Lizard research     
- 4 cdegroof      2016-04-14  Western Fence Lizard research     
- 5 lchroman      2016-04-14  Western Fence Lizard research     
- 6 maiz          2016-04-14  Western Fence Lizard research     
- 7 kimssight     2016-04-15  Western Fence Lizard research     
- 8 sarahwenner   2016-04-15  Western Fence Lizard research     
- 9 sarahwenner   2016-04-15  Western Fence Lizard research     
-10 sarahwenner   2016-04-15  Western Fence Lizard research     
+   user_login    common_name          scientific_name         observed_on
+   <chr>         <chr>                <chr>                   <date>     
+ 1 cdegroof      Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 2 deedeeflower5 Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 3 deedeeflower5 Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 4 cdegroof      Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 5 lchroman      Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 6 maiz          Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 7 kimssight     Western Fence Lizard Sceloporus occidentalis 2016-04-15 
+ 8 sarahwenner   Western Fence Lizard Sceloporus occidentalis 2016-04-15 
+ 9 sarahwenner   Western Fence Lizard Sceloporus occidentalis 2016-04-15 
+10 sarahwenner   Western Fence Lizard Sceloporus occidentalis 2016-04-15 
 # ℹ 2,960 more rows
 ```
 
-Pipe operator take the thing on the lefthand side and insert it as the first argument of the function on the righthand side. By putting each of our functions onto a new line, we can build a nice, readable **pipeline**. It can be useful to think of this as a little assembly line for our data. It starts at the top and gets piped into a `filter()` function, and it comes out modified somewhat. It then gets sent into the `select()` function, where it is further modified, and then the final product gets printed out to our console. It can also be helpful to think of `%>%` as meaning "and then".  
+Pipe operator take the thing on the lefthand side and insert it as the first argument of the function on the righthand side. By putting each of our functions onto a new line, we can build a nice, readable pipeline. It can be useful to think of this as a little assembly line for our data. It starts at the top and gets piped into a `filter()` function, and it comes out modified somewhat. It then gets sent into the `select()` function, where it is further modified, and then the final product gets printed out to our console. It can also be helpful to think of `%>%` as meaning "and then".  
 
-If you want to see all the records, assign the data.frame to an object, and use `View()`
+If you want to see all the records, assign the data.frame to an object.
 
 
 ```r
 temp <- inat_raw %>% 
   filter(common_name == 'Western Fence Lizard') %>% 
-  select(user_login, observed_on, common_name, quality_grade) 
-
-# View(temp)
+  select(user_login, common_name, scientific_name, observed_on) 
 ```
 
 We can also use multiple conditions in one `filter()` statement. 
@@ -392,23 +380,23 @@ When researchers use iNaturalist data, the normally use research grade observati
 inat_raw %>% 
   filter( common_name == 'Western Fence Lizard' 
          & quality_grade == 'research')  %>% 
-  select(user_login, observed_on, common_name)
+  select(user_login, common_name, scientific_name, observed_on)
 ```
 
 ```output
-# A tibble: 2,942 × 3
-   user_login    observed_on common_name         
-   <chr>         <date>      <chr>               
- 1 cdegroof      2016-04-14  Western Fence Lizard
- 2 deedeeflower5 2016-04-14  Western Fence Lizard
- 3 deedeeflower5 2016-04-14  Western Fence Lizard
- 4 cdegroof      2016-04-14  Western Fence Lizard
- 5 lchroman      2016-04-14  Western Fence Lizard
- 6 maiz          2016-04-14  Western Fence Lizard
- 7 kimssight     2016-04-15  Western Fence Lizard
- 8 sarahwenner   2016-04-15  Western Fence Lizard
- 9 sarahwenner   2016-04-15  Western Fence Lizard
-10 sarahwenner   2016-04-15  Western Fence Lizard
+# A tibble: 2,942 × 4
+   user_login    common_name          scientific_name         observed_on
+   <chr>         <chr>                <chr>                   <date>     
+ 1 cdegroof      Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 2 deedeeflower5 Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 3 deedeeflower5 Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 4 cdegroof      Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 5 lchroman      Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 6 maiz          Western Fence Lizard Sceloporus occidentalis 2016-04-14 
+ 7 kimssight     Western Fence Lizard Sceloporus occidentalis 2016-04-15 
+ 8 sarahwenner   Western Fence Lizard Sceloporus occidentalis 2016-04-15 
+ 9 sarahwenner   Western Fence Lizard Sceloporus occidentalis 2016-04-15 
+10 sarahwenner   Western Fence Lizard Sceloporus occidentalis 2016-04-15 
 # ℹ 2,932 more rows
 ```
 
@@ -420,23 +408,23 @@ Here we will get observations  where `user_login` is 'natureinla' and `common_na
 ```r
 inat_raw %>% 
   filter(user_login == 'natureinla' & common_name == 'Western Fence Lizard') %>% 
-  select(user_login, observed_on, common_name) 
+  select(user_login, common_name, scientific_name, observed_on) 
 ```
 
 ```output
-# A tibble: 79 × 3
-   user_login observed_on common_name         
-   <chr>      <date>      <chr>               
- 1 natureinla 2016-04-16  Western Fence Lizard
- 2 natureinla 2016-04-16  Western Fence Lizard
- 3 natureinla 2016-04-17  Western Fence Lizard
- 4 natureinla 2016-04-16  Western Fence Lizard
- 5 natureinla 2016-04-17  Western Fence Lizard
- 6 natureinla 2016-04-17  Western Fence Lizard
- 7 natureinla 2016-04-19  Western Fence Lizard
- 8 natureinla 2016-04-16  Western Fence Lizard
- 9 natureinla 2016-04-18  Western Fence Lizard
-10 natureinla 2016-04-16  Western Fence Lizard
+# A tibble: 79 × 4
+   user_login common_name          scientific_name         observed_on
+   <chr>      <chr>                <chr>                   <date>     
+ 1 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-16 
+ 2 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-16 
+ 3 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-17 
+ 4 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-16 
+ 5 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-17 
+ 6 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-17 
+ 7 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-19 
+ 8 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-16 
+ 9 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-18 
+10 natureinla Western Fence Lizard Sceloporus occidentalis 2016-04-16 
 # ℹ 69 more rows
 ```
 
@@ -477,7 +465,7 @@ temp <- inat_raw %>%
   filter(user_login == 'cdegroof' 
          | user_login == 'deedeeflower5'
          & common_name == 'Western Fence Lizard')  %>% 
-  select(user_login, observed_on, common_name)
+  select(user_login, common_name, scientific_name, observed_on)
 ```
 
 You can also use multiple filter statememts.
@@ -657,8 +645,7 @@ We want to save the cleaned up data set so we can use it later.  We can save dat
 
 
 ```r
-path = here('data', 'cleaned', 'observations.csv')
-write_csv(inat, file= path)
+write_csv(inat, file= 'data/cleaned/observations.csv')
 ```
 
 
